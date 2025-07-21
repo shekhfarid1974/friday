@@ -14,22 +14,25 @@ def speak(text):
 
 def listen_command():
     recognizer = sr.Recognizer()
-    recognizer.pause_threshold = 1.0  # wait longer before assuming user stopped speaking
+    recognizer.pause_threshold = 1.2  # Wait longer for silence before stopping
+    recognizer.energy_threshold = 300  # Adjust sensitivity to background noise
+
     with sr.Microphone() as source:
         print("\n🎙️ Listening...")
         recognizer.adjust_for_ambient_noise(source, duration=1.5)
-        print("Energy threshold:", recognizer.energy_threshold)
-        audio = recognizer.listen(source)
-    try:
-        command = recognizer.recognize_google(audio, language='en-US')
-        print("You said:", command)
-        return command.lower()
-    except sr.UnknownValueError:
-        print("Sorry, I did not catch that.")
-        return None
-    except sr.RequestError:
-        print("Speech recognition failed.")
-        return None
+        try:
+            # This will record for up to 8 seconds max, or until pause
+            audio = recognizer.listen(source, phrase_time_limit=8)
+            command = recognizer.recognize_google(audio, language='en-US')
+            print("✅ You said:", command)
+            return command.lower()
+        except sr.UnknownValueError:
+            print("❌ Could not understand. Please try again.")
+            return None
+        except sr.RequestError as e:
+            print("🔌 Could not request results; check your internet.")
+            return None
+
 
 def google_search(query, num_results=5):
     print(f"Searching Google for: {query}")
