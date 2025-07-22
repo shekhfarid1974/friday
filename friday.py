@@ -1,102 +1,113 @@
 import speech_recognition as sr
+import pyttsx3
 import wikipedia
 import time
-import pyttsx3
+import os  # For PC interactions
+import random
 
-# Setup text-to-speech engine
-tts_engine = pyttsx3.init()
-tts_engine.setProperty('rate', 175)
+# Initialize TTS
+engine = pyttsx3.init()
+engine.setProperty('rate', 175)
+engine.setProperty('voice', engine.getProperty('voices')[1].id)
 
 def speak(text):
-    print(f"\n🗣️ FRIDAY: {text}")
-    tts_engine.say(text)
-    tts_engine.runAndWait()
-    time.sleep(0.5)  # Short pause after speaking
+    print(f"\n🗣️ FRIDAY: {text}\n")
+    engine.say(text)
+    engine.runAndWait()
 
-def listen_command():
+def listen():
     recognizer = sr.Recognizer()
     with sr.Microphone() as source:
-        print("\n🎙️ Listening...")
-        recognizer.adjust_for_ambient_noise(source, duration=0.5)
-        try:
-            audio = recognizer.listen(source, timeout=3, phrase_time_limit=10)
-        except sr.WaitTimeoutError:
-            print("⏱️ Timeout waiting for speech.")
-            return None
-
+        print("🎙️ Listening... Speak clearly.")
+        audio = recognizer.listen(source, phrase_time_limit=7)
     try:
-        command = recognizer.recognize_google(audio)
-        print(f"✅ You said: {command}")
-        return command.lower().strip()
+        query = recognizer.recognize_google(audio).lower()
+        print(f"✅ You said: {query}")
+        return query
     except sr.UnknownValueError:
-        print("❌ Could not understand.")
+        speak("❌ Sorry, I didn't understand.")
         return None
     except sr.RequestError:
-        print("❌ API unavailable.")
+        speak("❌ Network error. Try again.")
         return None
 
 def extract_topic(command):
-    keywords = ["tell me about", "can you tell me about", "search for", "search", "who is", "what is", "define", "know about"]
-    for phrase in keywords:
-        if phrase in command:
-            return command.split(phrase)[-1].strip()
-    return command  # fallback: assume entire command is the topic
+    keywords = ["tell me about", "who is", "what is", "search for", "define"]
+    for key in keywords:
+        if key in command:
+            return command.split(key)[-1].strip()
+    return command
 
 def search_wikipedia(topic):
     try:
-        speak(f"Searching Wikipedia for {topic}...")
-        print(f"🗣️ FRIDAY: Searching for {topic}...")
-
-        # Set language and search
-        wikipedia.set_lang("en")
-        page = wikipedia.page(topic)
-        time.sleep(0.8)
-
-        summary = wikipedia.summary(topic, sentences=2)
+        summary = wikipedia.summary(topic, sentences=3)
+        speak(f"🔍 Here's what I found about {topic}:")
         speak(summary)
-        print(f"\n🗣️ FRIDAY: {summary}\n")
-
-        print(f"🔗 Source: {page.url}")
-        speak("You can read more at the link I found.")
-        speak("Want to know anything else?")
-
-    except wikipedia.DisambiguationError as e:
-        speak("That topic is a bit confusing. Please be more specific.")
-        print("⚠️ Disambiguation error:", e.options)
-
+        print(f"🔗 Source: https://en.wikipedia.org/wiki/{topic.replace(' ', '_')}")
+    except wikipedia.DisambiguationError:
+        speak("Too many results. Can you be more specific?")
     except wikipedia.PageError:
-        speak("Sorry, I couldn't find any results for that.")
-        print("❌ Wikipedia page not found.")
-
+        speak("I couldn't find anything about that.")
     except Exception as e:
-        speak("Something went wrong while searching.")
-        print(f"❌ Error: {str(e)}")
+        print("Error:", e)
+        speak("Something went wrong.")
 
-def main():
-    speak("Hi, I am FRIDAY. You can ask me anything.")
+def ask_you_something():
+    questions = [
+        "How are you today?",
+        "Do you want to hear the latest news?",
+        "Shall I tell you a fun fact?",
+        "Do you want to open any application?"
+    ]
+    q = random.choice(questions)
+    speak(q)
+    response = listen()
+    return response
+
+def open_app(app_name):
+    try:
+        if "notepad" in app_name:
+            os.system("start notepad")
+            speak("📝 Opening Notepad.")
+        elif "chrome" in app_name:
+            os.system("start chrome")
+            speak("🌐 Opening Chrome.")
+        else:
+            speak("I don't know that app yet.")
+    except:
+        speak("Sorry, I couldn't open that.")
+
+def friday():
+    speak("Hello, I am FRIDAY, your assistant.")
+    time.sleep(1)
 
     while True:
-        command = listen_command()
+        # Proactive question first
+        user_reply = ask_you_something()
+        if user_reply:
+            if "yes" in user_reply:
+                speak("Alright, go ahead!")
+            elif "no" in user_reply:
+                speak("Okay, let's do something else.")
+
+        command = listen()
         if not command:
             continue
-
         if "exit" in command or "stop" in command:
-            speak("Goodbye. FRIDAY signing off.")
+            speak("👋 Goodbye, see you later!")
             break
 
-        topic = extract_topic(command)
+        elif "open" in command:
+            open_app(command)
 
-        if topic:
-            search_wikipedia(topic)
         else:
-            speak("Please say what you want me to search.")
-            second_try = listen_command()
-            if second_try:
-                topic = extract_topic("tell me about " + second_try)
-                if topic:
-                    search_wikipedia(topic)
-                else:
-                    speak("Still couldn't get the topic. Try again.")
+            topic = extract_topic(command)
+            if topic:
+                speak(f"Searching Wikipedia for {topic}...")
+                search_wikipedia(topic)
+            else:
+                speak("Please tell me what to search for.")
 
+# Start
 if __name__ == "__main__":
-    main()
+    friday()
