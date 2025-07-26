@@ -1,11 +1,10 @@
-import pyttsx3
+# friday.py (Updated)
 import speech_recognition as sr
 import datetime
 import wikipedia
 import webbrowser
 import os
 import pyautogui
-import requests
 import json
 import openai
 import pvporcupine
@@ -14,7 +13,13 @@ import struct
 import threading
 import queue
 from dotenv import load_dotenv
-from bs4 import BeautifulSoup
+# Import the speak function and TTS worker from utils
+# Remove the old TTS code from here
+from utils import speak, stop_tts # speak_worker, speak_queue, engine_lock are internal to utils now
+# Import the brain function
+from brain import search_google_and_respond
+from bs4 import BeautifulSoup # Might be used by brain or other parts, keep if needed
+import requests # Might be used by brain or other parts, keep if needed
 
 # -----------------------------
 # Load Environment Variables
@@ -28,41 +33,10 @@ if not porcupine_access_key:
     print("❌ PORCUPINE_ACCESS_KEY not found in .env file.")
     exit()
 
-# -----------------------------
-# Thread-Safe Text-to-Speech System
-# -----------------------------
-speak_queue = queue.Queue()
-engine_lock = threading.Lock()
-
-def speak_worker():
-    """Background worker for speaking (runs in one thread only)"""
-    engine = pyttsx3.init('sapi5')
-    voices = engine.getProperty('voices')
-    engine.setProperty('voice', voices[1].id)  # Female voice (change to [0] for male)
-
-    while True:
-        text = speak_queue.get()
-        if text is None:
-            break
-        with engine_lock:
-            try:
-                engine.say(text)
-                engine.runAndWait()
-            except RuntimeError as e:
-                if "run loop already started" in str(e):
-                    print("⚠️ TTS engine busy, skipping...")
-                else:
-                    print("❌ TTS Error:", e)
-    engine.stop()
-
-# Start TTS worker thread
-tts_thread = threading.Thread(target=speak_worker, daemon=True)
-tts_thread.start()
-
-def speak(text):
-    """Thread-safe speak function"""
-    print(f"F.R.I.D.A.Y.: {text}")
-    speak_queue.put(text)
+# ----------------------------- (REMOVE THE OLD TTS CODE FROM HERE) -----------------------------
+# All the TTS code (speak_queue, engine_lock, speak_worker, speak function) has been moved to utils.py
+# Do not duplicate it here.
+# ---------------------------------------------------------------------------------------
 
 # -----------------------------
 # Memory System
@@ -130,20 +104,27 @@ def process_command(query):
     global memory
     print(f"🧠 Processing: {query}")
 
+    # --- Handle specific commands ---
     if 'wikipedia' in query:
         speak("🔍 Searching Wikipedia...")
         try:
-            result = wikipedia.summary(query.replace("wikipedia", "").strip(), sentences=2)
-            speak("According to Wikipedia: " + result)
-        except:
-            speak("No results found on Wikipedia.")
-    
+            # Improve query extraction
+            search_term = query.replace("wikipedia", "").strip()
+            if search_term:
+                result = wikipedia.summary(search_term, sentences=2)
+                speak("According to Wikipedia: " + result)
+            else:
+                 speak("What would you like to search on Wikipedia?")
+        except Exception as e: # Catch specific exceptions if possible
+            print(f"Wikipedia error: {e}") # Log the error
+            speak("No results found on Wikipedia or an error occurred.")
+
     elif 'open youtube' in query:
-        webbrowser.open("https://youtube.com ")
+        webbrowser.open("https://youtube.com")
         speak("🚀 Opening YouTube.")
 
     elif 'open google' in query:
-        webbrowser.open("https://google.com ")
+        webbrowser.open("https://google.com")
         speak("🌐 Opening Google.")
 
     elif 'time' in query:
@@ -155,41 +136,80 @@ def process_command(query):
         speak(f"Today is {date}.")
 
     elif 'search for' in query and 'on google' in query:
+        # --- Use the new brain function ---
         term = query.replace("search for", "").replace("on google", "").strip()
-        webbrowser.open(f"https://google.com/search?q={term}")
-        speak(f"🔎 Searching Google for {term}.")
+        # Instead of just opening the browser, get the info
+        # webbrowser.open(f"https://google.com/search?q={term}")
+        # speak(f"🔎 Searching Google for {term}.")
+        search_google_and_respond(term) # This handles speaking/printing
 
     elif 'take screenshot' in query:
-        filename = f"screenshot_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
-        pyautogui.screenshot(filename)
-        speak("📸 Screenshot saved.")
+        try: # Add error handling
+            filename = f"screenshot_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+            pyautogui.screenshot(filename)
+            speak("📸 Screenshot saved.")
+        except Exception as e:
+             print(f"Screenshot error: {e}")
+             speak("Failed to take screenshot.")
 
     elif 'remember that' in query:
-        key_value = query.replace("remember that", "").strip()
-        if "=" in key_value:
-            key, value = map(str.strip, key_value.split("=", 1))
-        else:
-            key, value = "note", key_value
-        memory[key] = value
-        save_memory(memory)
-        speak(f"✅ Remembered: {key}.")
+        try:
+            key_value = query.replace("remember that", "").strip()
+            if "=" in key_value:
+                key, value = map(str.strip, key_value.split("=", 1))
+            else:
+                key, value = "note", key_value
+            memory[key] = value
+            save_memory(memory)
+            speak(f"✅ Remembered: {key}.")
+        except Exception as e:
+             print(f"Memory error: {e}")
+             speak("Failed to remember that.")
 
     elif 'what did i say about' in query:
-        key = query.replace("what did i say about", "").strip()
-        value = memory.get(key, "No record found.")
-        speak(value)
+        try:
+            key = query.replace("what did i say about", "").strip()
+            value = memory.get(key, "No record found.")
+            speak(value)
+        except Exception as e:
+             print(f"Memory retrieval error: {e}")
+             speak("Failed to retrieve that information.")
 
     elif 'bye' in query or 'sleep' in query:
         speak("💤 Going to standby mode.")
         start_wake_word_detection()
         return
 
+    # --- Handle general queries by asking the brain first ---
+    # Check for common question starters
+    elif any(keyword in query for keyword in ['tell me about', 'what is', 'who is', 'how do', 'why is', 'define']):
+         # Extract the core question part (basic example)
+         # You might want a more sophisticated way to extract the search term
+         search_term = query
+         # Simple removal of common prefixes
+         prefixes = ['hey friday', 'friday', 'tell me about', 'what is', 'who is', 'how do', 'why is', 'define']
+         for prefix in prefixes:
+             # Use lower() for case-insensitive matching
+             if search_term.startswith(prefix.lower()):
+                  search_term = search_term[len(prefix):].strip()
+                  break
+         # Remove trailing punctuation if needed
+         search_term = search_term.rstrip('?.,!')
+         if search_term:
+             search_google_and_respond(search_term)
+         else:
+              # Fallback to GPT if brain can't handle or query is unclear
+              speak("💭 Thinking...")
+              reply = gpt_query(query)
+              speak(reply)
     else:
+        # Default to GPT for other commands
         speak("💭 Thinking...")
         reply = gpt_query(query)
         speak(reply)
 
     # After any command, return to wake-word mode after a short delay
+    # Consider if this is always desired, or only for specific cases
     threading.Timer(2.0, start_wake_word_detection).start()
 
 # -----------------------------
@@ -222,10 +242,10 @@ def start_wake_word_detection():
         stream = None
 
         try:
-            # Initialize Porcupine
+            # Ensure the .ppn file path is correct relative to where you run the script
             porcupine = pvporcupine.create(
                 access_key=porcupine_access_key,
-                keyword_paths=["hey-friday_en_windows_v3_0_0.ppn"]  # ← Make sure this file exists!
+                keyword_paths=["hey-friday_en_windows_v3_0_0.ppn"]  # ← Make sure this file exists in the correct path!
             )
 
             pa = pyaudio.PyAudio()
@@ -246,25 +266,25 @@ def start_wake_word_detection():
                     pcm_unpacked = struct.unpack_from("h" * porcupine.frame_length, pcm)
                     if porcupine.process(pcm_unpacked) >= 0:
                         speak("👋 Yes, sir?")
-                        break
+                        break # Exit the loop and trigger command mode
                 except Exception as e:
                     print("👂 Audio read error:", e)
-                    break
+                    break # Exit on audio error
 
         except Exception as e:
             speak("⚠️ Failed to start wake word detection.")
             print("❌ Porcupine Error:", e)
         finally:
             # Cleanup resources
+            wake_word_active = False # Reset flag BEFORE cleanup
             if stream:
                 stream.close()
             if pa:
                 pa.terminate()
             if porcupine:
                 porcupine.delete()
-            wake_word_active = False
 
-        # Switch to command mode
+        # Switch to command mode AFTER cleanup
         command_mode()
 
     # Run in background thread
@@ -290,5 +310,9 @@ if __name__ == "__main__":
 
     except KeyboardInterrupt:
         speak("👋 Goodbye, sir. F.R.I.D.A.Y. signing off.")
-        speak_queue.put(None)  # Stop TTS thread
-        os._exit(0)
+        # Signal the TTS thread to stop via utils
+        stop_tts()
+        # Give it a moment to finish (optional, but good practice)
+        # from utils import tts_thread
+        # tts_thread.join(timeout=2)
+        os._exit(0) # Force exit cleanly
