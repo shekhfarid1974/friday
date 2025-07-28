@@ -47,10 +47,10 @@ APP_MAPPINGS = {
 # -------------------------
 async def focus_window(title_keyword: str) -> bool:
     if not gw:
-        logger.warning("⚠ pygetwindow")
+        logger.warning("⚠ pygetwindow পাওয়া যায়নি")
         return False
 
-    await asyncio.sleep(1.5)  # Give time for window to appear
+    await asyncio.sleep(1.5)
     title_keyword = title_keyword.lower().strip()
 
     for window in gw.getAllWindows():
@@ -70,7 +70,7 @@ async def index_items(base_dirs):
                 item_index.append({"name": d, "path": os.path.join(root, d), "type": "folder"})
             for f in files:
                 item_index.append({"name": f, "path": os.path.join(root, f), "type": "file"})
-    logger.info(f"✅ Indexed {len(item_index)} items.")
+    logger.info(f"✅ {len(item_index)} টি ফাইল ও ফোল্ডার সূচিভুক্ত হয়েছে।")
     return item_index
 
 async def search_item(query, index, item_type):
@@ -79,7 +79,7 @@ async def search_item(query, index, item_type):
     if not choices:
         return None
     best_match, score = process.extractOne(query, choices)
-    logger.info(f"🔍 Matched '{query}' to '{best_match}' with score {score}")
+    logger.info(f"🔍 '{query}' এর জন্য মিলেছে '{best_match}' স্কোর {score}")
     if score > 70:
         for item in filtered:
             if item["name"] == best_match:
@@ -92,28 +92,28 @@ async def open_folder(path):
         os.startfile(path) if os.name == 'nt' else subprocess.call(['xdg-open', path])
         await focus_window(os.path.basename(path))
     except Exception as e:
-        logger.error(f"❌ फ़ाइल open करने में error आया। {e}")
+        logger.error(f"❌ ফোল্ডার খোলার সময় সমস্যা হয়েছে: {e}")
 
 async def play_file(path):
     try:
         os.startfile(path) if os.name == 'nt' else subprocess.call(['xdg-open', path])
         await focus_window(os.path.basename(path))
     except Exception as e:
-        logger.error(f"❌ फ़ाइल open करने में error आया।: {e}")
+        logger.error(f"❌ ফাইল চালু করতে ব্যর্থ: {e}")
 
 async def create_folder(path):
     try:
         os.makedirs(path, exist_ok=True)
-        return f"✅ Folder create हो गया।: {path}"
+        return f"✅ ফোল্ডার তৈরি হয়েছে: {path}"
     except Exception as e:
-        return f"❌ फ़ाइल create करने में error आया।: {e}"
+        return f"❌ ফোল্ডার তৈরি করতে সমস্যা হয়েছে: {e}"
 
 async def rename_item(old_path, new_path):
     try:
         os.rename(old_path, new_path)
-        return f"✅ नाम बदलकर {new_path} कर दिया गया।"
+        return f"✅ নাম পরিবর্তন করা হয়েছে: {new_path}"
     except Exception as e:
-        return f"❌ नाम बदलना fail हो गया: {e}"
+        return f"❌ নাম পরিবর্তন করতে ব্যর্থ: {e}"
 
 async def delete_item(path):
     try:
@@ -121,9 +121,9 @@ async def delete_item(path):
             os.rmdir(path)
         else:
             os.remove(path)
-        return f"🗑️ Deleted: {path}"
+        return f"🗑️ মুছে ফেলা হয়েছে: {path}"
     except Exception as e:
-        return f"❌ Delete नहीं हुआ।: {e}"
+        return f"❌ মুছে ফেলা যায়নি: {e}"
 
 # App control
 @function_tool
@@ -134,16 +134,16 @@ async def open(app_title: str) -> str:
         await asyncio.create_subprocess_shell(f'start "" "{app_command}"', shell=True)
         focused = await focus_window(app_title)
         if focused:
-            return f"🚀 App launch हुआ और focus में है: {app_title}."
+            return f"🚀 অ্যাপ চালু হয়েছে এবং ফোকাসে আছে: {app_title}."
         else:
-            return f"🚀 {app_title} Launch किया गया, लेकिन window पर focus नहीं हो पाया।"
+            return f"🚀 {app_title} চালু হয়েছে, কিন্তু উইন্ডোতে ফোকাস হয়নি।"
     except Exception as e:
-        return f"❌ {app_title} Launch नहीं हो पाया।: {e}"
+        return f"❌ {app_title} চালু করা যায়নি: {e}"
 
 @function_tool
 async def close(window_title: str) -> str:
     if not win32gui:
-        return "❌ win32gui"
+        return "❌ win32gui পাওয়া যায়নি"
 
     def enumHandler(hwnd, _):
         if win32gui.IsWindowVisible(hwnd):
@@ -151,7 +151,7 @@ async def close(window_title: str) -> str:
                 win32gui.PostMessage(hwnd, win32con.WM_CLOSE, 0, 0)
 
     win32gui.EnumWindows(enumHandler, None)
-    return f"❌ Window बंद हो गई है।: {window_title}"
+    return f"❌ উইন্ডো বন্ধ করা হয়েছে: {window_title}"
 
 # Jarvis command logic
 @function_tool
@@ -174,24 +174,24 @@ async def folder_file(command: str) -> str:
             if item:
                 new_path = os.path.join(os.path.dirname(item["path"]), new_name)
                 return await rename_item(item["path"], new_path)
-        return "❌ rename command valid नहीं है।"
+        return "❌ রিনেম কমান্ড সঠিক নয়।"
 
     if "delete" in command_lower:
         item = await search_item(command, index, "folder") or await search_item(command, index, "file")
         if item:
             return await delete_item(item["path"])
-        return "❌ Delete करने के लिए item नहीं मिला।"
+        return "❌ মুছে ফেলার জন্য আইটেম পাওয়া যায়নি।"
 
     if "folder" in command_lower or "open folder" in command_lower:
         item = await search_item(command, index, "folder")
         if item:
             await open_folder(item["path"])
-            return f"✅ Folder opened: {item['name']}"
-        return "❌ Folder नहीं मिला।."
+            return f"✅ ফোল্ডার খোলা হয়েছে: {item['name']}"
+        return "❌ ফোল্ডার পাওয়া যায়নি।"
 
     item = await search_item(command, index, "file")
     if item:
         await play_file(item["path"])
-        return f"✅ File opened: {item['name']}"
+        return f"✅ ফাইল খোলা হয়েছে: {item['name']}"
 
-    return "⚠ कुछ भी match नहीं हुआ।"
+    return "⚠ কোন মেলা পাওয়া যায়নি।"

@@ -2,26 +2,26 @@ import os
 import requests
 import logging
 from dotenv import load_dotenv
-from livekit.agents import function_tool  # ✅ Correct decorator
+from livekit.agents import function_tool
 from datetime import datetime
 
-# Load environment variables
+# পরিবেশ ভ্যারিয়েবল লোড করুন
 load_dotenv()
 
-# Configure logging
+# লগিং কনফিগারেশন
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 @function_tool
 async def google_search(query: str) -> str:
-    logger.info(f"Query प्राप्त हुई।: {query}")
+    logger.info(f"প্রশ্ন পাওয়া গেছে: {query}")
 
     api_key = os.getenv("GOOGLE_SEARCH_API_KEY")
     search_engine_id = os.getenv("SEARCH_ENGINE_ID")
 
     if not api_key or not search_engine_id:
-        logger.error("API key या Search Engine ID missing है।")
-        return "Environment variables में API key या Search Engine ID missing है।"
+        logger.error("API Key বা Search Engine ID অনুপস্থিত।")
+        return "Environment variables-এ API Key বা Search Engine ID পাওয়া যায়নি।"
 
     url = "https://www.googleapis.com/customsearch/v1"
     params = {
@@ -31,25 +31,25 @@ async def google_search(query: str) -> str:
         "num": 3
     }
 
-    logger.info("Google Custom Search API को request भेजी जा रही है...")
+    logger.info("Google Custom Search API-তে অনুরোধ পাঠানো হচ্ছে...")
     response = requests.get(url, params=params)
 
     if response.status_code != 200:
-        logger.error(f"Google API में error आया: {response.status_code} - {response.text}")
-        return f"Google Search API में error आया: {response.status_code} - {response.text}"
+        logger.error(f"Google API-তে সমস্যা: {response.status_code} - {response.text}")
+        return f"Google Search API-তে ত্রুটি: {response.status_code} - {response.text}"
 
     data = response.json()
     results = data.get("items", [])
 
     if not results:
-        logger.info("कोई results नहीं मिले।")
-        return "कोई results नहीं मिले।"
+        logger.info("কোনো ফলাফল পাওয়া যায়নি।")
+        return "দুঃখিত, কোনো ফলাফল পাওয়া যায়নি।"
 
     formatted = ""
-    logger.info("Search results:")
+    logger.info("সার্চ ফলাফল:")
     for i, item in enumerate(results, start=1):
-        title = item.get("title", "No title")
-        link = item.get("link", "No link")
+        title = item.get("title", "শিরোনাম পাওয়া যায়নি")
+        link = item.get("link", "লিঙ্ক পাওয়া যায়নি")
         snippet = item.get("snippet", "")
         formatted += f"{i}. {title}\n{link}\n{snippet}\n\n"
         logger.info(f"{i}. {title}\n{link}\n{snippet}\n")
@@ -58,5 +58,6 @@ async def google_search(query: str) -> str:
 
 @function_tool
 async def get_current_datetime() -> str:
-    return datetime.now().isoformat()
-
+    now = datetime.now()
+    logger.info(f"বর্তমান তারিখ ও সময়: {now}")
+    return now.isoformat()
