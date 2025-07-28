@@ -1,5 +1,7 @@
-# friday.py (Updated)
-import speech_recognition as sr
+# friday.py (Updated - PyAudio import removed)
+# NOTE: This assumes take_command uses text input and wake word detection
+# no longer relies on PyAudio or the old start_wake_word_detection logic.
+
 import datetime
 import wikipedia
 import webbrowser
@@ -7,19 +9,18 @@ import os
 import pyautogui
 import json
 import openai
-import pvporcupine
-import pyaudio
-import struct
+# import pvporcupine # Remove/comment if wake word logic is also changed
+# import pyaudio      # *** REMOVED PYAUDIO IMPORT ***
+# import struct       # Remove if not used elsewhere and wake word is changed
 import threading
 import queue
 from dotenv import load_dotenv
 # Import the speak function and TTS worker from utils
-# Remove the old TTS code from here
 from utils import speak, stop_tts # speak_worker, speak_queue, engine_lock are internal to utils now
 # Import the brain function
 from brain import search_google_and_respond
-from bs4 import BeautifulSoup # Might be used by brain or other parts, keep if needed
-import requests # Might be used by brain or other parts, keep if needed
+from bs4 import BeautifulSoup # Keep if used by brain.py or other parts
+import requests # Keep if used by brain.py or other parts
 
 # -----------------------------
 # Load Environment Variables
@@ -27,11 +28,11 @@ import requests # Might be used by brain or other parts, keep if needed
 load_dotenv()
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
-porcupine_access_key = os.getenv("PORCUPINE_ACCESS_KEY")
+# porcupine_access_key = os.getenv("PORCUPINE_ACCESS_KEY") # Remove/comment if not used
+# if not porcupine_access_key: # Remove/comment if not used
+#     print("❌ PORCUPINE_ACCESS_KEY not found in .env file.")
+#     exit() # Remove/comment if not used
 
-if not porcupine_access_key:
-    print("❌ PORCUPINE_ACCESS_KEY not found in .env file.")
-    exit()
 
 # ----------------------------- (REMOVE THE OLD TTS CODE FROM HERE) -----------------------------
 # All the TTS code (speak_queue, engine_lock, speak_worker, speak function) has been moved to utils.py
@@ -78,24 +79,40 @@ def gpt_query(prompt):
         return "I'm having trouble connecting to the AI service right now."
 
 # -----------------------------
-# Voice Command Handler
+# Text Command Handler (Modified as discussed)
 # -----------------------------
 def take_command():
-    r = sr.Recognizer()
-    with sr.Microphone() as source:
-        print("🎙️ Listening for command...")
-        r.pause_threshold = 1
-        try:
-            audio = r.listen(source, timeout=5, phrase_time_limit=5)
-        except:
-            return "None"
+    """
+    Gets command via text input instead of voice.
+    This removes the dependency on PyAudio.
+    """
     try:
-        query = r.recognize_google(audio, language='en-in').lower()
-        print(f"👤 User said: {query}")
-        return query
-    except:
-        speak("Sorry, I didn't catch that.")
-        return "None"
+        print("\n--- F.R.I.D.A.Y. Text Input Mode ---")
+        print("Type your command and press Enter.")
+        print("Examples: 'search for the weather on google', 'tell me about AI', 'time', 'open youtube'")
+        print("Type 'exit' or 'quit' to stop F.R.I.D.A.Y.")
+        print("-------------------------------------")
+        user_input = input("🗣️ >>> ")
+        user_input = user_input.strip() # Remove leading/trailing whitespace
+
+        if user_input.lower() in ['exit', 'quit', 'bye']:
+            print("🛑 Exiting F.R.I.D.A.Y. Text Mode.")
+            return "exit_friday" # Special command to trigger shutdown
+
+        if not user_input: # Handle empty input
+             print("⚠️ No input received.")
+             return "none"
+
+        print(f"👤 User said (via text): {user_input}")
+        return user_input.lower()
+    except KeyboardInterrupt:
+        print("\n\n🛑 Received Ctrl+C interrupt.")
+        return "exit_friday" # Treat Ctrl+C as exit command
+    except Exception as e:
+        print(f"❌ Error getting text input: {e}")
+        speak("Sorry, there was an error getting your text input.")
+        return "none"
+
 
 # -----------------------------
 # Command Processor
@@ -177,8 +194,9 @@ def process_command(query):
 
     elif 'bye' in query or 'sleep' in query:
         speak("💤 Going to standby mode.")
-        start_wake_word_detection()
-        return
+        # start_wake_word_detection() # Remove/comment if wake word is gone
+        # For text mode, maybe just loop back or exit?
+        return # Just return, let command_mode_loop handle the loop
 
     # --- Handle general queries by asking the brain first ---
     # Check for common question starters
@@ -208,111 +226,81 @@ def process_command(query):
         reply = gpt_query(query)
         speak(reply)
 
-    # After any command, return to wake-word mode after a short delay
-    # Consider if this is always desired, or only for specific cases
-    threading.Timer(2.0, start_wake_word_detection).start()
+    # Removed the timer that calls start_wake_word_detection for text mode
+
 
 # -----------------------------
-# Command Mode (After Wake Word)
+# Command Mode (Updated for Text Exit)
 # -----------------------------
 def command_mode():
+    """ Single command execution """
     query = take_command()
-    if query != "None":
+    if query == "exit_friday":
+        # Trigger shutdown
+        print("🛑 F.R.I.D.A.Y. shutting down...")
+        speak("👋 Goodbye, sir. F.R.I.D.A.Y. signing off.")
+        # Schedule TTS stop and exit
+        threading.Timer(1.0, lambda: (stop_tts(), os._exit(0))).start()
+        return # Exit command_mode
+    elif query != "none":
         process_command(query)
     else:
-        speak("I didn't hear anything.")
-        start_wake_word_detection()  # Return anyway
+        # Optional: Handle 'none' case (e.g., error or empty input)
+        # For text mode, you might just loop back
+        pass
+    # In text mode, you might want to call command_mode again immediately
+    # instead of waiting for wake word.
+    # However, if you want to mimic wake-word behavior, leave the timer.
+    # For continuous text input, see command_mode_loop below.
 
 # -----------------------------
-# Wake Word Detection (Single Instance Only)
+# Wake Word Detection (REMOVED/COMMENTED OUT)
 # -----------------------------
-wake_word_active = False
-
-def start_wake_word_detection():
-    global wake_word_active
-
-    if wake_word_active:
-        return  # Prevent duplicate listeners
-    wake_word_active = True
-
-    def detect():
-        global wake_word_active
-        porcupine = None
-        pa = None
-        stream = None
-
-        try:
-            # Ensure the .ppn file path is correct relative to where you run the script
-            porcupine = pvporcupine.create(
-                access_key=porcupine_access_key,
-                keyword_paths=["hey-friday_en_windows_v3_0_0.ppn"]  # ← Make sure this file exists in the correct path!
-            )
-
-            pa = pyaudio.PyAudio()
-            stream = pa.open(
-                rate=porcupine.sample_rate,
-                channels=1,
-                format=pyaudio.paInt16,
-                input=True,
-                frames_per_buffer=porcupine.frame_length
-            )
-
-            speak("🎧 F.R.I.D.A.Y. is now on standby...")
-            print("🔊 Listening for 'Hey Friday...' (Press Ctrl+C to quit)")
-
-            while wake_word_active:
-                try:
-                    pcm = stream.read(porcupine.frame_length, exception_on_overflow=False)
-                    pcm_unpacked = struct.unpack_from("h" * porcupine.frame_length, pcm)
-                    if porcupine.process(pcm_unpacked) >= 0:
-                        speak("👋 Yes, sir?")
-                        break # Exit the loop and trigger command mode
-                except Exception as e:
-                    print("👂 Audio read error:", e)
-                    break # Exit on audio error
-
-        except Exception as e:
-            speak("⚠️ Failed to start wake word detection.")
-            print("❌ Porcupine Error:", e)
-        finally:
-            # Cleanup resources
-            wake_word_active = False # Reset flag BEFORE cleanup
-            if stream:
-                stream.close()
-            if pa:
-                pa.terminate()
-            if porcupine:
-                porcupine.delete()
-
-        # Switch to command mode AFTER cleanup
-        command_mode()
-
-    # Run in background thread
-    threading.Thread(target=detect, daemon=True).start()
-
+# The original start_wake_word_detection function which used pyaudio and pvporcupine
+# has been removed or commented out as it requires PyAudio.
+# If you have a new implementation using sounddevice, it would go here.
+# def start_wake_word_detection():
+#     # ... new sounddevice-based logic ...
+#     pass
 
 # -----------------------------
-# Startup & Main Loop
+# Startup & Main Loop (Updated for Text Mode)
 # -----------------------------
 def wish_me():
     hour = datetime.datetime.now().hour
     greeting = "Good morning" if hour < 12 else "Good afternoon" if hour < 18 else "Good evening"
     speak(f"{greeting}, sir. I am F.R.I.D.A.Y. Ready when you are.")
 
+def command_mode_loop():
+    """Runs the command mode in a continuous loop for text input."""
+    print("🎧 F.R.I.D.A.Y. initialized in text mode. Awaiting commands.")
+    while True:
+        query = take_command()
+        if query == "exit_friday":
+            print("🛑 F.R.I.D.A.Y. shutting down...")
+            speak("👋 Goodbye, sir. F.R.I.D.A.Y. signing off.")
+            # Schedule TTS stop and exit to allow speech to finish
+            threading.Timer(1.5, lambda: (stop_tts(), os._exit(0))).start()
+            break # Exit the loop
+        elif query != "none":
+            process_command(query)
+        # Add a small pause if needed, though input() is blocking
+        # time.sleep(0.1)
+
 if __name__ == "__main__":
     try:
         wish_me()
-        start_wake_word_detection()
+        # Instead of wake word, start the command loop directly
+        command_mode_loop() # Use the continuous text input loop
 
+        # Original loop removed for text mode:
+        # start_wake_word_detection()
         # Keep main thread alive
-        while True:
-            threading.Event().wait(1)  # Sleep 1 sec, wait for interrupt
+        # while True:
+        #     threading.Event().wait(1)  # Sleep 1 sec, wait for interrupt
 
-    except KeyboardInterrupt:
-        speak("👋 Goodbye, sir. F.R.I.D.A.Y. signing off.")
-        # Signal the TTS thread to stop via utils
-        stop_tts()
-        # Give it a moment to finish (optional, but good practice)
-        # from utils import tts_thread
-        # tts_thread.join(timeout=2)
-        os._exit(0) # Force exit cleanly
+    except Exception as e: # Catch unexpected errors in main thread
+         print(f"❌ Unexpected error in main loop: {e}")
+         speak("An unexpected error occurred. Shutting down.")
+         stop_tts()
+         os._exit(1)
