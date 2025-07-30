@@ -13,3 +13,20 @@ pynput
 python-Levenshtein
 pywin32
 livekit
+
+
+
+
+
+# | File Name                 | Purpose                   | Key Features                       |
+# | ------------------------- | ------------------------- | ---------------------------------- |
+# | agent.py                  | Main voice assistant loop | Speech in/out, connects to LiveKit |
+# | deepseek.py               | LLM backend wrapper       | Smart replies from DeepSeek        |
+# | .env                      | Secrets storage           | API keys (Google, OpenAI, LiveKit) |
+# | requirements.txt          | Python package list       | Installation dependencies          |
+# | Jarvis\_prompts.py        | Assistant personality     | Voice, tone, memory                |
+# | Jarvis\_file\_opner.py    | Local app/file opening    | “Open Chrome”, “Open folder”       |
+# | Jarvis\_google\_search.py | Web info retrieval        | Google/DuckDuckGo search           |
+# | jarvis\_get\_weather.py   | Weather feature           | Gets local weather                 |
+# | keyboard\_mouse\_CTRL.py  | PC control                | Move mouse, press keys             |
+# | Jarvis\_window\_CTRL.py   | Window navigation         | Switch apps, minimize/maximize     |
