@@ -84,7 +84,14 @@ async def handle_command(command, index):
 
 @function_tool
 async def Play_file(name: str) -> str:
-    folders_to_index = ["D:/"]
+    folders_to_index = [
+    "C:/Users/Farid-Myolbd/Desktop",
+    "C:/Users/Farid-Myolbd/Documents",
+    "C:/Users/Farid-Myolbd/Downloads",
+    "C:/",  # full system drive access (be careful)
+    "D:/",  # optional
+    "E:/",  # if external or secondary storage exists
+]
     index = await index_files(folders_to_index)
     command = name.strip()
     return await handle_command(command, index)
