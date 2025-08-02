@@ -1,6 +1,7 @@
 import feedparser
 from livekit.agents import function_tool
 
+
 @function_tool
 async def get_latest_news(topic: str = "") -> str:
     if not topic:
@@ -15,3 +16,4 @@ async def get_latest_news(topic: str = "") -> str:
     for entry in feed.entries[:5]:
         result += f"🟢 {entry.title}\n🔗 {entry.link}\n\n"
     return result.strip()
+
