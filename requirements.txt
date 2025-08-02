@@ -13,8 +13,12 @@ pynput
 python-Levenshtein
 pywin32
 livekit
+feedparser
 
 
+
+# source .venv/Scripts/activate
+# pip install -r requirements.txt
 
 
 

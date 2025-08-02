@@ -12,6 +12,8 @@ from jarvis_get_whether import get_weather
 from Jarvis_window_CTRL import open, close, folder_file
 from Jarvis_file_opner import Play_file
 from keyboard_mouse_CTRL import move_cursor_tool, mouse_click_tool, scroll_cursor_tool, type_text_tool, press_key_tool, swipe_gesture_tool, press_hotkey_tool, control_volume_tool
+from jarvis_news_fetcher import get_latest_news
+
 
 load_dotenv()
 
@@ -34,7 +36,8 @@ class Assistant(Agent):
                             press_key_tool,  # এই টুলটি কীবোর্ড কী প্রেস করার জন্য
                             press_hotkey_tool,  # এই টুলটি শর্টকাট কী প্রেস করার জন্য
                             control_volume_tool,  # এই টুলটি ভলিউম কন্ট্রোল করার জন্য
-                            swipe_gesture_tool  # এই টুলটি স্ক্রিনে সুইপ জেসচার করার জন্য
+                            swipe_gesture_tool,  # এই টুলটি স্ক্রিনে সুইপ জেসচার করার জন্য
+                            get_latest_news
                          ]
                          )
 
