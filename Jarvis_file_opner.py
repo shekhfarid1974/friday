@@ -147,6 +147,18 @@ async def handle_command(command, index):
 
 
 @function_tool
+async def Play_file(name: str) -> str:
+    folders_to_index = [
+        "C:/Users/Farid-Myolbd/Desktop",
+        "C:/Users/Farid-Myolbd/Documents",
+        "C:/Users/Farid-Myolbd/Downloads",
+        "C:/", "D:/", "E:/"
+    ]
+    index = await index_files(folders_to_index)
+    return await handle_command(name.strip(), index)
+
+
+@function_tool
 async def folder_file(command: str) -> str:
     folders_to_index = [
         "C:/Users/Farid-Myolbd/Desktop",

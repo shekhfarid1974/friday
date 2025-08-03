@@ -10,7 +10,7 @@ from Jarvis_prompts import behavior_prompts, Reply_prompts
 from Jarvis_google_search import google_search, get_current_datetime
 from jarvis_get_whether import get_weather
 from Jarvis_window_CTRL import open, close, folder_file
-from Jarvis_file_opner import Play_file
+from Jarvis_file_opner import Play_file, folder_file
 from keyboard_mouse_CTRL import move_cursor_tool, mouse_click_tool, scroll_cursor_tool, type_text_tool, press_key_tool, swipe_gesture_tool, press_hotkey_tool, control_volume_tool
 from jarvis_news_fetcher import get_latest_news
 
