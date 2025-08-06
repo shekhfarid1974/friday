@@ -15,8 +15,10 @@ pywin32
 livekit
 feedparser
 
-
+# If .venv is not there at all, you need to create it first:
+# python -m venv .venv
 # source .venv/Scripts/activate
+
 # pip install -r requirements.txt
 
 
