@@ -2,7 +2,7 @@ import os
 import asyncio
 import uuid
 from livekit.agents import AutoSubscribe, JobContext, WorkerOptions, cli, Worker
-from livekit.agents.pipeline import AgentSession
+from livekit.agents import AgentSession
 from livekit.plugins import google, silero
 from langchain_chroma import Chroma
 from langchain_google_genai import ChatGoogleGenerativeAI
