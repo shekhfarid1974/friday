@@ -14,6 +14,10 @@ python-Levenshtein
 pywin32
 livekit
 feedparser
+# Memory and Gemini integrations
+langchain-chroma
+langchain-google-genai
+chromadb
 
 # If .venv is not there at all, you need to create it first:
 # python -m venv .venv
