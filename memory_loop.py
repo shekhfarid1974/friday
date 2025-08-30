@@ -35,7 +35,7 @@ class MemoryExtractor:
         """
         The main loop that checks for and saves new conversations.
         """
-        memory = ConversationMemory("Gaurav_22")
+        memory = ConversationMemory("Farid_22")
 
         while True:
             # Check for new messages every 1 second

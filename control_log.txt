@@ -1,0 +1,9 @@
+2025-08-30 14:33:28.606891: Controller auto-activated.
+2025-08-30 14:33:28.829294: Mouse moved down
+2025-08-30 14:33:30.843039: Controller auto-deactivated.
+2025-08-30 14:33:31.121909: Controller auto-activated.
+2025-08-30 14:33:31.307867: Mouse moved left
+2025-08-30 14:33:33.316306: Controller auto-deactivated.
+2025-08-30 14:33:38.810925: Controller auto-activated.
+2025-08-30 14:33:38.991125: Mouse moved down
+2025-08-30 14:33:41.000143: Controller auto-deactivated.
