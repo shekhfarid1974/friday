@@ -19,6 +19,8 @@ langchain-chroma
 langchain-google-genai
 chromadb
 
+
+
 # If .venv is not there at all, you need to create it first:
 # python -m venv .venv
 # source .venv/Scripts/activate
