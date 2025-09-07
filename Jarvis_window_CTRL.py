@@ -34,9 +34,9 @@ APP_MAPPINGS = {
     "control panel": "control",
     "settings": "start ms-settings:",
     "paint": "mspaint",
-    "vs code": "C:\\Users\\gaura\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
-    "postman": "C:\\Users\\gaura\\AppData\\Local\\Postman\\Postman.exe",
-    "Jio shpare browser": "C:\\Users\\Gaurav\\AppData\\Local\\JIO\\JioSphere\\Application\\JioSphere.exe"
+    "vs code": "C:\\Users\\farid\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+    "postman": "C:\\Users\\farid\\AppData\\Local\\Postman\\Postman.exe",
+    "Jio shpare browser": "C:\\Users\\Farid\\AppData\\Local\\JIO\\JioSphere\\Application\\JioSphere.exe"
 }
 
 # -------------------------
