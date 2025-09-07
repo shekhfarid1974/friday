@@ -6,12 +6,6 @@ import asyncio
 from fuzzywuzzy import process
 
 try:
-    from livekit.agents import function_tool
-except ImportError:
-    def function_tool(func): 
-        return func
-
-try:
     import win32gui
     import win32con
 except ImportError:
@@ -22,6 +16,8 @@ try:
     import pygetwindow as gw
 except ImportError:
     gw = None
+
+from langchain.tools import tool
 
 # Setup encoding and logger
 sys.stdout.reconfigure(encoding='utf-8')
@@ -39,7 +35,8 @@ APP_MAPPINGS = {
     "settings": "start ms-settings:",
     "paint": "mspaint",
     "vs code": "C:\\Users\\gaura\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
-    "postman": "C:\\Users\\gaura\\AppData\\Local\\Postman\\Postman.exe"
+    "postman": "C:\\Users\\gaura\\AppData\\Local\\Postman\\Postman.exe",
+    "Jio shpare browser": "C:\\Users\\Gaurav\\AppData\\Local\\JIO\\JioSphere\\Application\\JioSphere.exe"
 }
 
 # -------------------------
@@ -47,10 +44,10 @@ APP_MAPPINGS = {
 # -------------------------
 async def focus_window(title_keyword: str) -> bool:
     if not gw:
-        logger.warning("⚠ pygetwindow পাওয়া যায়নি")
+        logger.warning("⚠ pygetwindow")
         return False
 
-    await asyncio.sleep(1.5)
+    await asyncio.sleep(1.5)  # Give time for window to appear
     title_keyword = title_keyword.lower().strip()
 
     for window in gw.getAllWindows():
@@ -70,7 +67,7 @@ async def index_items(base_dirs):
                 item_index.append({"name": d, "path": os.path.join(root, d), "type": "folder"})
             for f in files:
                 item_index.append({"name": f, "path": os.path.join(root, f), "type": "file"})
-    logger.info(f"✅ {len(item_index)} টি ফাইল ও ফোল্ডার সূচিভুক্ত হয়েছে।")
+    logger.info(f"✅ Indexed {len(item_index)} items.")
     return item_index
 
 async def search_item(query, index, item_type):
@@ -79,7 +76,7 @@ async def search_item(query, index, item_type):
     if not choices:
         return None
     best_match, score = process.extractOne(query, choices)
-    logger.info(f"🔍 '{query}' এর জন্য মিলেছে '{best_match}' স্কোর {score}")
+    logger.info(f"🔍 Matched '{query}' to '{best_match}' with score {score}")
     if score > 70:
         for item in filtered:
             if item["name"] == best_match:
@@ -92,28 +89,28 @@ async def open_folder(path):
         os.startfile(path) if os.name == 'nt' else subprocess.call(['xdg-open', path])
         await focus_window(os.path.basename(path))
     except Exception as e:
-        logger.error(f"❌ ফোল্ডার খোলার সময় সমস্যা হয়েছে: {e}")
+        logger.error(f"❌ फ़ाइल open करने में error आया। {e}")
 
 async def play_file(path):
     try:
         os.startfile(path) if os.name == 'nt' else subprocess.call(['xdg-open', path])
         await focus_window(os.path.basename(path))
     except Exception as e:
-        logger.error(f"❌ ফাইল চালু করতে ব্যর্থ: {e}")
+        logger.error(f"❌ फ़ाइल open करने में error आया।: {e}")
 
 async def create_folder(path):
     try:
         os.makedirs(path, exist_ok=True)
-        return f"✅ ফোল্ডার তৈরি হয়েছে: {path}"
+        return f"✅ Folder create हो गया।: {path}"
     except Exception as e:
-        return f"❌ ফোল্ডার তৈরি করতে সমস্যা হয়েছে: {e}"
+        return f"❌ फ़ाइल create करने में error आया।: {e}"
 
 async def rename_item(old_path, new_path):
     try:
         os.rename(old_path, new_path)
-        return f"✅ নাম পরিবর্তন করা হয়েছে: {new_path}"
+        return f"✅ नाम बदलकर {new_path} कर दिया गया।"
     except Exception as e:
-        return f"❌ নাম পরিবর্তন করতে ব্যর্থ: {e}"
+        return f"❌ नाम बदलना fail हो गया: {e}"
 
 async def delete_item(path):
     try:
@@ -121,29 +118,55 @@ async def delete_item(path):
             os.rmdir(path)
         else:
             os.remove(path)
-        return f"🗑️ মুছে ফেলা হয়েছে: {path}"
+        return f"🗑️ Deleted: {path}"
     except Exception as e:
-        return f"❌ মুছে ফেলা যায়নি: {e}"
+        return f"❌ Delete नहीं हुआ।: {e}"
 
 # App control
-@function_tool
-async def open(app_title: str) -> str:
+@tool
+async def open_app(app_title: str) -> str:
+
+    """
+    open_app a desktop app like Notepad, Chrome, VLC, etc.
+
+    Use this tool when the user asks to launch an application on their computer.
+    Example prompts:
+    - "Notepad खोलो"
+    - "Chrome open करो"
+    - "VLC media player चलाओ"
+    - "Calculator launch करो"
+    """
+
+
     app_title = app_title.lower().strip()
     app_command = APP_MAPPINGS.get(app_title, app_title)
     try:
         await asyncio.create_subprocess_shell(f'start "" "{app_command}"', shell=True)
         focused = await focus_window(app_title)
         if focused:
-            return f"🚀 অ্যাপ চালু হয়েছে এবং ফোকাসে আছে: {app_title}."
+            return f"🚀 App launch हुआ और focus में है: {app_title}."
         else:
-            return f"🚀 {app_title} চালু হয়েছে, কিন্তু উইন্ডোতে ফোকাস হয়নি।"
+            return f"🚀 {app_title} Launch किया गया, लेकिन window पर focus नहीं हो पाया।"
     except Exception as e:
-        return f"❌ {app_title} চালু করা যায়নি: {e}"
+        return f"❌ {app_title} Launch नहीं हो पाया।: {e}"
 
-@function_tool
-async def close(window_title: str) -> str:
+@tool
+async def close_app(window_title: str) -> str:
+
+    """
+    Closes the applications window by its title.
+
+    Use this tool when the user wants to close any app or window on their desktop.
+    Example prompts:
+    - "Notepad बंद करो"
+    - "Close VLC"
+    - "Chrome की window बंद कर दो"
+    - "Calculator को बंद करो"
+    """
+
+
     if not win32gui:
-        return "❌ win32gui পাওয়া যায়নি"
+        return "❌ win32gui"
 
     def enumHandler(hwnd, _):
         if win32gui.IsWindowVisible(hwnd):
@@ -151,11 +174,25 @@ async def close(window_title: str) -> str:
                 win32gui.PostMessage(hwnd, win32con.WM_CLOSE, 0, 0)
 
     win32gui.EnumWindows(enumHandler, None)
-    return f"❌ উইন্ডো বন্ধ করা হয়েছে: {window_title}"
+    return f"❌ Window बंद हो गई है।: {window_title}"
 
 # Jarvis command logic
-@function_tool
+@tool
 async def folder_file(command: str) -> str:
+
+    """
+    Handles folder and file actions like open, create, rename, or delete based on user command.
+
+    Use this tool when the user wants to manage folders or files using natural language.
+    Example prompts:
+    - "Projects folder बनाओ"
+    - "OldName को NewName में rename करो"
+    - "xyz.mp4 delete कर दो"
+    - "Music folder खोलो"
+    - "Resume.pdf चलाओ"
+    """
+
+
     folders_to_index = ["D:/"]
     index = await index_items(folders_to_index)
     command_lower = command.lower()
@@ -174,24 +211,24 @@ async def folder_file(command: str) -> str:
             if item:
                 new_path = os.path.join(os.path.dirname(item["path"]), new_name)
                 return await rename_item(item["path"], new_path)
-        return "❌ রিনেম কমান্ড সঠিক নয়।"
+        return "❌ rename command valid नहीं है।"
 
     if "delete" in command_lower:
         item = await search_item(command, index, "folder") or await search_item(command, index, "file")
         if item:
             return await delete_item(item["path"])
-        return "❌ মুছে ফেলার জন্য আইটেম পাওয়া যায়নি।"
+        return "❌ Delete करने के लिए item नहीं मिला।"
 
     if "folder" in command_lower or "open folder" in command_lower:
         item = await search_item(command, index, "folder")
         if item:
             await open_folder(item["path"])
-            return f"✅ ফোল্ডার খোলা হয়েছে: {item['name']}"
-        return "❌ ফোল্ডার পাওয়া যায়নি।"
+            return f"✅ Folder opened: {item['name']}"
+        return "❌ Folder नहीं मिला।."
 
     item = await search_item(command, index, "file")
     if item:
         await play_file(item["path"])
-        return f"✅ ফাইল খোলা হয়েছে: {item['name']}"
+        return f"✅ File opened: {item['name']}"
 
-    return "⚠ কোন মেলা পাওয়া যায়নি।"
+    return "⚠ कुछ भी match नहीं हुआ।"

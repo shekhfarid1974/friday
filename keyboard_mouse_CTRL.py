@@ -6,6 +6,8 @@ from pynput.keyboard import Key, Controller as KeyboardController
 from pynput.mouse import Button, Controller as MouseController
 from typing import List
 from livekit.agents import function_tool
+from langchain.tools import tool
+import codecs
 
 # ---------------------
 # SafeController Class
@@ -81,16 +83,31 @@ class SafeController:
         return f"🖱️ Scrolled {direction}"
 
     async def type_text(self, text: str):
-        if not self.is_active(): return "🛑 Controller is inactive."
+        if not self.is_active():
+            return "🛑 Controller is inactive."
+
+        # Fix: convert escaped sequences into real ones
+        text = codecs.decode(text, "unicode_escape")
+
         for char in text:
-            if not char.isprintable():
-                continue
             try:
-                self.keyboard.press(char)
-                self.keyboard.release(char)
+                if char == "\n":
+                    self.keyboard.press(Key.enter)
+                    self.keyboard.release(Key.enter)
+                elif char == "\t":
+                    self.keyboard.press(Key.tab)
+                    self.keyboard.release(Key.tab)
+                elif char.isprintable():
+                    self.keyboard.press(char)
+                    self.keyboard.release(char)
+                else:
+                    continue
+
                 await asyncio.sleep(0.05)
+
             except Exception:
                 continue
+
         self.log(f"Typed text: {text}")
         return f"⌨️ Typed: {text}"
 
@@ -146,10 +163,6 @@ class SafeController:
         self.log(f"Swipe gesture: {direction}")
         return f"🖱️ Swipe {direction} done."
 
-# ------------------------------
-# LiveKit Tool Wrappers Section
-# ------------------------------
-
 controller = SafeController()
 
 async def with_temporary_activation(fn, *args, **kwargs):
@@ -160,35 +173,160 @@ async def with_temporary_activation(fn, *args, **kwargs):
     controller.deactivate()
     return result
 
-@function_tool
+@tool
 async def move_cursor_tool(direction: str, distance: int = 100):
+
+    """
+    Temporarily activates the controller and moves the mouse cursor in a specified direction.
+
+    Args:
+        direction (str): Direction to move the cursor. Must be one of ["up", "down", "left", "right"].
+        distance (int, optional): Number of pixels to move the cursor. Defaults to 100.
+
+    Returns:
+        str: A message describing the mouse movement action.
+
+    Note:
+        The controller is automatically activated before the action and deactivated afterward.
+    """
+
+
     return await with_temporary_activation(controller.move_cursor, direction, distance)
 
-@function_tool
+@tool
 async def mouse_click_tool(button: str = "left"):
+
+    """
+    Temporarily activates the controller and performs a mouse click.
+
+    Simulates clicking behavior for automation or voice command triggers.
+
+    Args:
+        button (str, optional): Type of mouse click to perform.
+            Must be one of ["left", "right", "double"]. Defaults to "left".
+
+    Returns:
+        str: A message indicating the type of mouse click performed.
+
+    Notes:
+        - "double" simulates a double left-click.
+        - Useful for GUI automation or hands-free system interaction.
+    """
+
+
     return await with_temporary_activation(controller.mouse_click, button)
 
-@function_tool
+@tool
 async def scroll_cursor_tool(direction: str, amount: int = 10):
+
+    """
+    Scrolls the screen vertically in the specified direction.
+
+    Useful for commands like "scroll down" or "upar karo".
+
+    Args:
+        direction (str): The scroll direction. Must be either "up" or "down".
+        amount (int, optional): The scroll intensity or number of scroll steps. Defaults to 10.
+
+    Returns:
+        str: A message indicating the direction and magnitude of the scroll action.
+
+    Notes:
+        - Positive `amount` values scroll further; can be tuned for smooth or fast scrolling.
+        - Designed for fuzzy natural language control.
+    """
+
+
     return await with_temporary_activation(controller.scroll_cursor, direction, amount)
 
-@function_tool
+@tool
 async def type_text_tool(text: str):
+
+    """
+    Simulates typing the given text character by character, as if entered manually from a keyboard.
+
+    Useful for commands like "type hello world" or "hello likho".
+
+    Args:
+        text (str): The full string to type, including spaces, punctuation, and symbols.
+
+    Returns:
+        str: A message confirming the typed input.
+    """
     return await with_temporary_activation(controller.type_text, text)
 
-@function_tool
+@tool
 async def press_key_tool(key: str):
+
+    """
+    Simulates pressing a single key on the keyboard, like Enter, Esc, or any letter/number.
+
+    Useful for commands like "Enter दबाओ", "Escape दबाओ", or "A press करो".
+
+    Args:
+        key (str): The name of the key to press (e.g., "enter", "a", "ctrl", "esc").
+
+    Returns:
+        str: A message confirming the key press or an error if the key is invalid.
+    """
+
+
     return await with_temporary_activation(controller.press_key, key)
 
-@function_tool
+@tool
 async def press_hotkey_tool(keys: List[str]):
+
+    """
+    Simulates pressing a keyboard shortcut like Ctrl+S, Alt+F4, etc.
+
+    Use this when the user says something like "save करो", "window बंद करो", 
+    or "refresh कर दो".
+
+    Args:
+        keys (List[str]): List of key names to press together (e.g., ["ctrl", "s"]).
+
+    Returns:
+        str: A message indicating which hotkey combination was pressed.
+    """
+
+
     return await with_temporary_activation(controller.press_hotkey, keys)
 
-@function_tool
+@tool
 async def control_volume_tool(action: str):
+
+    """
+    Changes the system volume using keyboard emulation.
+
+    Use this when the user says something like "volume बढ़ाओ", "mute कर दो", 
+    or "lower the sound".
+
+    Args:
+        action (str): One of ["up", "down", "mute"].
+
+    Returns:
+        str: A message confirming the volume change.
+    """
+
+
     return await with_temporary_activation(controller.control_volume, action)
 
-@function_tool
+@tool
 async def swipe_gesture_tool(direction: str):
+
+    """
+    Simulates a swipe gesture on the screen using the mouse.
+
+    Use this when the user wants to swipe in a direction like up, down, left, or right — 
+    for example: "नीचे स्क्रॉल करो", "left swipe करो", or "screen ऊपर करो".
+
+    Args:
+        direction (str): One of ["up", "down", "left", "right"].
+
+    Returns:
+        str: A message describing the swipe action.
+    """
+
+
     return await with_temporary_activation(controller.swipe_gesture, direction)
 

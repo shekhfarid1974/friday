@@ -35,7 +35,7 @@ class MemoryExtractor:
         """
         The main loop that checks for and saves new conversations.
         """
-        memory = ConversationMemory("Farid_22")
+        memory = ConversationMemory("Gaurav_22")
 
         while True:
             # Check for new messages every 1 second
@@ -71,4 +71,4 @@ class MemoryExtractor:
                 self.saved_message_count = len(current_chat_history)
             
             else:
-                logging.info("No new messages to save. Skipping.")
+                pass

@@ -2,40 +2,50 @@ import os
 import requests
 import logging
 from dotenv import load_dotenv
-from livekit.agents import function_tool  # ✅ সঠিক ডেকোরেটর
+from livekit.agents import function_tool  # ✅ Correct decorator
+from langchain.tools import tool
 
 load_dotenv()
+
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-def detect_city_by_ip() -> str:
+async def get_current_city():
     try:
-        logger.info("IP থেকে শহর সনাক্ত করার চেষ্টা করা হচ্ছে")
-        ip_info = requests.get("https://ipapi.co/json/").json()
-        city = ip_info.get("city")
-        if city:
-            logger.info(f"IP থেকে শহর সনাক্ত হয়েছে: {city}")
-            return city
-        else:
-            logger.warning("শহর সনাক্ত করা যায়নি, ডিফল্ট 'Dhaka' ব্যবহার করা হচ্ছে।")
-            return "Dhaka"
+        response = requests.get("https://ipinfo.io", timeout=5)
+        data = response.json()
+        return data.get("city", "Unknown")
     except Exception as e:
-        logger.error(f"IP থেকে শহর সনাক্ত করতে সমস্যা হয়েছে: {e}")
-        return "Dhaka"
+        return "Unknown"
 
-@function_tool
+@tool
 async def get_weather(city: str = "") -> str:
+
+    """
+    Gives current weather information for a given city.
+
+    Use this tool when the user asks about weather, rain, temperature, humidity, or wind.
+    If no city is given, detect city automatically.
+
+    Example prompts:
+    - "आज का मौसम कैसा है?"
+    - "Weather बताओ Bangalore का"
+    - "क्या बारिश होगी मुंबई में?"
+    """
+
+
+    
     api_key = os.getenv("OPENWEATHER_API_KEY")
 
     if not api_key:
-        logger.error("OpenWeather API key পাওয়া যায়নি।")
-        return "Environment variables-এ OpenWeather API key সেট করা হয়নি।"
+        logger.error("OpenWeather API key missing है।")
+        return "Environment variables में OpenWeather API key नहीं मिली।"
 
     if not city:
-        city = detect_city_by_ip()
+        city = get_current_city()
 
-    logger.info(f"{city} শহরের জন্য আবহাওয়া খোঁজা হচ্ছে।")
+    logger.info(f"City के लिए weather fetch किया जा रहा है।: {city}")
     url = "https://api.openweathermap.org/data/2.5/weather"
     params = {
         "q": city,
@@ -46,8 +56,8 @@ async def get_weather(city: str = "") -> str:
     try:
         response = requests.get(url, params=params)
         if response.status_code != 200:
-            logger.error(f"OpenWeather API তে সমস্যা: {response.status_code} - {response.text}")
-            return f"ত্রুটি: {city} শহরের জন্য আবহাওয়া পাওয়া যায়নি। দয়া করে শহরের নাম যাচাই করুন।"
+            logger.error(f"OpenWeather API में error आया।: {response.status_code} - {response.text}")
+            return f"Error: {city} के लिए weather fetch नहीं कर पाए। कृपया city name चेक करें।"
 
         data = response.json()
         weather = data["weather"][0]["description"].title()
@@ -55,15 +65,16 @@ async def get_weather(city: str = "") -> str:
         humidity = data["main"]["humidity"]
         wind_speed = data["wind"]["speed"]
 
-        result = (f"{city} শহরের আবহাওয়া:\n"
-                  f"- আবহাওয়া: {weather}\n"
-                  f"- তাপমাত্রা: {temperature}°C\n"
-                  f"- আর্দ্রতা: {humidity}%\n"
-                  f"- বাতাসের গতি: {wind_speed} m/s")
+        result = (f"Weather in {city}:\n"
+                  f"- Condition: {weather}\n"
+                  f"- Temperature: {temperature}°C\n"
+                  f"- Humidity: {humidity}%\n"
+                  f"- Wind Speed: {wind_speed} m/s")
 
-        logger.info(f"আবহাওয়ার ফলাফল: \n{result}")
+        logger.info(f"Weather result: \n{result}")
         return result
 
     except Exception as e:
-        logger.exception(f"আবহাওয়া খোঁজার সময় একটি সমস্যা হয়েছে: {e}")
-        return "আবহাওয়া খোঁজার সময় একটি ত্রুটি হয়েছে।"
+        logger.exception(f"Weather fetch करते समय exception आया: {e}")
+        return "Weather fetch करते समय एक error आया"
+    
