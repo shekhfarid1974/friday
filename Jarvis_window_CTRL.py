@@ -89,28 +89,28 @@ async def open_folder(path):
         os.startfile(path) if os.name == 'nt' else subprocess.call(['xdg-open', path])
         await focus_window(os.path.basename(path))
     except Exception as e:
-        logger.error(f"❌ फ़ाइल open करने में error आया। {e}")
+        logger.error(f"❌ ফাইল খোলার সময় error হয়েছে। {e}")
 
 async def play_file(path):
     try:
         os.startfile(path) if os.name == 'nt' else subprocess.call(['xdg-open', path])
         await focus_window(os.path.basename(path))
     except Exception as e:
-        logger.error(f"❌ फ़ाइल open करने में error आया।: {e}")
+        logger.error(f"❌ ফাইল খোলার সময় error হয়েছে: {e}")
 
 async def create_folder(path):
     try:
         os.makedirs(path, exist_ok=True)
-        return f"✅ Folder create हो गया।: {path}"
+        return f"✅ Folder create হয়ে গেছে: {path}"
     except Exception as e:
-        return f"❌ फ़ाइल create करने में error आया।: {e}"
+        return f"❌ ফাইল create করার সময় error হয়েছে: {e}"
 
 async def rename_item(old_path, new_path):
     try:
         os.rename(old_path, new_path)
-        return f"✅ नाम बदलकर {new_path} कर दिया गया।"
+        return f"✅ নাম পরিবর্তন করে {new_path} করা হয়েছে।"
     except Exception as e:
-        return f"❌ नाम बदलना fail हो गया: {e}"
+        return f"❌ নাম পরিবর্তন ব্যর্থ হয়েছে: {e}"
 
 async def delete_item(path):
     try:
@@ -120,7 +120,7 @@ async def delete_item(path):
             os.remove(path)
         return f"🗑️ Deleted: {path}"
     except Exception as e:
-        return f"❌ Delete नहीं हुआ।: {e}"
+        return f"❌ Delete হয়নি: {e}"
 
 # App control
 @tool
@@ -131,10 +131,10 @@ async def open_app(app_title: str) -> str:
 
     Use this tool when the user asks to launch an application on their computer.
     Example prompts:
-    - "Notepad खोलो"
-    - "Chrome open करो"
-    - "VLC media player चलाओ"
-    - "Calculator launch करो"
+    - "Notepad খুলুন"
+    - "Chrome open করুন"
+    - "VLC media player চালান"
+    - "Calculator launch করুন"
     """
 
 
@@ -144,11 +144,11 @@ async def open_app(app_title: str) -> str:
         await asyncio.create_subprocess_shell(f'start "" "{app_command}"', shell=True)
         focused = await focus_window(app_title)
         if focused:
-            return f"🚀 App launch हुआ और focus में है: {app_title}."
+            return f"🚀 App launch হয়েছে এবং focus করা হয়েছে: {app_title}."
         else:
-            return f"🚀 {app_title} Launch किया गया, लेकिन window पर focus नहीं हो पाया।"
+            return f"🚀 {app_title} Launch করা হয়েছে, কিন্তু window এ focus করা যায়নি।"
     except Exception as e:
-        return f"❌ {app_title} Launch नहीं हो पाया।: {e}"
+        return f"❌ {app_title} Launch হয়নি: {e}"
 
 @tool
 async def close_app(window_title: str) -> str:
@@ -158,10 +158,10 @@ async def close_app(window_title: str) -> str:
 
     Use this tool when the user wants to close any app or window on their desktop.
     Example prompts:
-    - "Notepad बंद करो"
+    - "Notepad বন্ধ করুন"
     - "Close VLC"
-    - "Chrome की window बंद कर दो"
-    - "Calculator को बंद करो"
+    - "Chrome এর window বন্ধ করুন"
+    - "Calculator বন্ধ করুন"
     """
 
 
@@ -174,7 +174,7 @@ async def close_app(window_title: str) -> str:
                 win32gui.PostMessage(hwnd, win32con.WM_CLOSE, 0, 0)
 
     win32gui.EnumWindows(enumHandler, None)
-    return f"❌ Window बंद हो गई है।: {window_title}"
+    return f"❌ Window বন্ধ হয়ে গেছে: {window_title}"
 
 # Jarvis command logic
 @tool
@@ -185,11 +185,11 @@ async def folder_file(command: str) -> str:
 
     Use this tool when the user wants to manage folders or files using natural language.
     Example prompts:
-    - "Projects folder बनाओ"
-    - "OldName को NewName में rename करो"
-    - "xyz.mp4 delete कर दो"
-    - "Music folder खोलो"
-    - "Resume.pdf चलाओ"
+    - "Projects folder তৈরি করুন"
+    - "OldName কে NewName এ rename করুন"
+    - "xyz.mp4 delete করুন"
+    - "Music folder খুলুন"
+    - "Resume.pdf চালান"
     """
 
 
@@ -211,24 +211,24 @@ async def folder_file(command: str) -> str:
             if item:
                 new_path = os.path.join(os.path.dirname(item["path"]), new_name)
                 return await rename_item(item["path"], new_path)
-        return "❌ rename command valid नहीं है।"
+        return "❌ rename command valid নয়।"
 
     if "delete" in command_lower:
         item = await search_item(command, index, "folder") or await search_item(command, index, "file")
         if item:
             return await delete_item(item["path"])
-        return "❌ Delete करने के लिए item नहीं मिला।"
+        return "❌ Delete করার জন্য item পাওয়া যায়নি।"
 
     if "folder" in command_lower or "open folder" in command_lower:
         item = await search_item(command, index, "folder")
         if item:
             await open_folder(item["path"])
             return f"✅ Folder opened: {item['name']}"
-        return "❌ Folder नहीं मिला।."
+        return "❌ Folder পাওয়া যায়নি।"
 
     item = await search_item(command, index, "file")
     if item:
         await play_file(item["path"])
         return f"✅ File opened: {item['name']}"
 
-    return "⚠ कुछ भी match नहीं हुआ।"
+    return "⚠ কিছুই match হয়নি।"
