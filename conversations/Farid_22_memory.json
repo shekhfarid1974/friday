@@ -1,0 +1,512 @@
+[
+  {
+    "messages": [
+      {
+        "id": "GR_d816034610a8",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          "আসসালামু আলাইকুম Shekh Farid sir! গুড মর্নিং! আজকের তারিখ <coroutine object StructuredTool.ainvoke at 0x0000020102583F40> এবং আপনি এখন <coroutine object get_current_city at 0x0000020102583ED0> শহরে আছেন। আমি Jarvis, আপনার পার্সোনাল এআই অ্যাসিস্ট্যান্ট, যাকে Shekh Farid ডিজাইন করেছেন। বলুন Shekh Farid sir, আমি আপনার কোন ধরনের সাহায্য করতে পারি?\n"
+        ],
+        "interrupted": true,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1757499995.420833
+      }
+    ],
+    "timestamp": 1757499996.4446971
+  },
+  {
+    "messages": [
+      {
+        "id": "GI_034cb99dfc65",
+        "type": "message",
+        "role": "user",
+        "content": [
+          "জারবেস এক্সিকিউট অল প্রোটোকল"
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1757500004.0222034
+      }
+    ],
+    "timestamp": 1757500004.4399672
+  },
+  {
+    "messages": [
+      {
+        "id": "GR_82293cd4bf36",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          "আচ্ছা, \"execute all protocols\" – এর মানে কি, একটু বুঝিয়ে বলবেন"
+        ],
+        "interrupted": true,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1757500004.0293965
+      }
+    ],
+    "timestamp": 1757500004.4540331
+  },
+  {
+    "messages": [
+      {
+        "id": "GI_bf70eb2f2671",
+        "type": "message",
+        "role": "user",
+        "content": [
+          "আমি তোমারে এসব জিনিসপত্র বুঝাইতে পারমু না তুমি আমারে এটা বলো যে তুমি আমার জিহলো লোকেশন কই পাইস"
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1757500026.4951239
+      }
+    ],
+    "timestamp": 1757500026.504267
+  },
+  {
+    "messages": [
+      {
+        "id": "GR_6b17c401ca39",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          "আচ্ছা, আপনার জিওলোকেশন কিভাবে পেয়েছি, সেটা জানতে চান? Well, আমি তো একটা AI assistant, Shekh Farid sir, তাই কিছু system protocols follow করতে হয়। লোকেশন জানাটা সেইগুলোর মধ্যে একটা যাতে আমি আপনাকে আরও ভালোভাবে সাহায্য করতে পারি। কিন্তু আপনি যদি জিওলোকেশন নিয়ে চিন্তিত হন, তাহলে সেটা বন্ধ করার অপশনও আছে। আপনি"
+        ],
+        "interrupted": true,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1757500026.5135775
+      }
+    ],
+    "timestamp": 1757500027.5338018
+  },
+  {
+    "messages": [
+      {
+        "id": "GI_ebfe1656a275",
+        "type": "message",
+        "role": "user",
+        "content": [
+          "তুমি আমাকে গুড মর্নিং বলছো কেন এখন তো তোমার সন্দেহ হয়ে গেছে প্রায়"
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1757500034.3274674
+      }
+    ],
+    "timestamp": 1757500034.5225828
+  },
+  {
+    "messages": [
+      {
+        "id": "GI_ddcdad3eb727",
+        "type": "message",
+        "role": "user",
+        "content": [
+          "Sorry"
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1757500035.8533304
+      }
+    ],
+    "timestamp": 1757500036.5549874
+  },
+  {
+    "messages": [
+      {
+        "id": "GI_cc49a121c194",
+        "type": "message",
+        "role": "user",
+        "content": [
+          "বেয়াদব সরি সরি বলে সরি না"
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1757500045.0647395
+      }
+    ],
+    "timestamp": 1757500045.72032
+  },
+  {
+    "messages": [
+      {
+        "id": "GR_009428a5e934",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          "আরে یار! তু tension মত লে, সব হো জায়েগা। কিভাবে হেল্প করতে পারি, সেটাই বলুন"
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1757500045.0737696
+      }
+    ],
+    "timestamp": 1757500045.7243133
+  },
+  {
+    "messages": [
+      {
+        "id": "GI_2e423c152447",
+        "type": "message",
+        "role": "user",
+        "content": [
+          "আপনি আমাকে কি হেল্প করবেন"
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1757500051.6486306
+      }
+    ],
+    "timestamp": 1757500051.9292347
+  },
+  {
+    "messages": [
+      {
+        "id": "GI_e0249040a38e",
+        "type": "message",
+        "role": "user",
+        "content": [
+          "আচ্ছা আপনি এক কাজ করেন"
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1757500053.9079485
+      }
+    ],
+    "timestamp": 1757500053.953413
+  },
+  {
+    "messages": [
+      {
+        "id": "GI_0a8a00422878",
+        "type": "message",
+        "role": "user",
+        "content": [
+          "अपनी लोकल होस्ट अफ करें"
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1757500059.1898615
+      }
+    ],
+    "timestamp": 1757500059.9510167
+  },
+  {
+    "messages": [
+      {
+        "id": "GR_1f3d0f731817",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          "लोकल"
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1757500059.1948664
+      }
+    ],
+    "timestamp": 1757500059.9558415
+  },
+  {
+    "messages": [
+      {
+        "id": "GI_0e320c064c82",
+        "type": "message",
+        "role": "user",
+        "content": [
+          "Hello."
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1757500072.3013616
+      }
+    ],
+    "timestamp": 1757500073.0317051
+  },
+  {
+    "messages": [
+      {
+        "id": "GR_8455d2175f23",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          "ওকে বস। Localhost অফ করতে বলছেন?"
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1757500072.3133633
+      }
+    ],
+    "timestamp": 1757500073.0357058
+  },
+  {
+    "messages": [
+      {
+        "id": "GI_12157fab69d2",
+        "type": "message",
+        "role": "user",
+        "content": [
+          "হ্যাঁ হ্যাঁ হ্যাঁ হ্যাঁ আমি বলতেছি লোকাল হোস্টটা অফ করে দাও"
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1757500081.1767468
+      }
+    ],
+    "timestamp": 1757500082.100584
+  },
+  {
+    "messages": [
+      {
+        "id": "GR_7bcf1f1c15c4",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          "ঠিক আছে Shekh Farid sir, আমি আপনার জন্য লোকাল হোস্ট অফ করে দিচ্ছি।"
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1757500081.183734
+      }
+    ],
+    "timestamp": 1757500082.1165817
+  },
+  {
+    "messages": [
+      {
+        "id": "GI_fd61ce9a6a06",
+        "type": "message",
+        "role": "user",
+        "content": [
+          "Correcto."
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1757500089.8719566
+      }
+    ],
+    "timestamp": 1757500090.186869
+  },
+  {
+    "messages": [
+      {
+        "id": "GR_1622b0b72f0b",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          "এक्ज़্যাক্টলি কি করতে হবে, সেটা একটু ক্লিয়ার করে"
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1757500089.88094
+      }
+    ],
+    "timestamp": 1757500090.1928697
+  },
+  {
+    "messages": [
+      {
+        "id": "GI_9e7dac6dbcb2",
+        "type": "message",
+        "role": "user",
+        "content": [
+          "ওকে তুমি এক কাজ করো ফায়ার বক্স ওপেন করো ওইখানে লিখো ইউটিউব ডটকম"
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1757500100.643601
+      }
+    ],
+    "timestamp": 1757500101.2190442
+  },
+  {
+    "messages": [
+      {
+        "id": "GR_5aab5d9e4f5b",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          "ফায়ারফক্স ও"
+        ],
+        "interrupted": true,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1757500100.6496081
+      }
+    ],
+    "timestamp": 1757500101.2230449
+  },
+  {
+    "messages": [
+      {
+        "id": "GI_54533b72b98a",
+        "type": "message",
+        "role": "user",
+        "content": [
+          "ইউটিউবের থেকে নেটওয়ার্ক চাকের সবচেয়ে লেটেস্ট ভিডিও ভিডিও যেটা সেটা"
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1757500106.3607488
+      }
+    ],
+    "timestamp": 1757500107.2322414
+  },
+  {
+    "messages": [
+      {
+        "id": "GI_9a09a4bc0d03",
+        "type": "message",
+        "role": "user",
+        "content": [
+          "Open copy."
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1757500110.9464648
+      }
+    ],
+    "timestamp": 1757500111.2487466
+  },
+  {
+    "messages": [
+      {
+        "id": "GR_ef49fdccff32",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          "আমাকে ভিডিও ওপেন করতে বলছেন, নাকি কপি করতে বলছেন?"
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1757500110.9574642
+      }
+    ],
+    "timestamp": 1757500111.2567399
+  },
+  {
+    "messages": [
+      {
+        "id": "GI_d6242b0ea225",
+        "type": "message",
+        "role": "user",
+        "content": [
+          "ইউপেন করে ওখান থেকে একটা ভিডিও প্লে করতে বলতেছি"
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1757500121.3883543
+      }
+    ],
+    "timestamp": 1757500121.389336
+  },
+  {
+    "messages": [
+      {
+        "id": "GR_042cfe9d925d",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          "আচ্ছা Shekh Farid sir, ইউটিউব ওপেন করে ভিডিও প্লে করতে বলছেন। ক"
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1757500121.4173455
+      }
+    ],
+    "timestamp": 1757500122.4002905
+  },
+  {
+    "messages": [
+      {
+        "id": "GI_73445f972b62",
+        "type": "message",
+        "role": "user",
+        "content": [
+          "قروط وطن"
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1757500128.8149514
+      }
+    ],
+    "timestamp": 1757500129.399516
+  },
+  {
+    "messages": [
+      {
+        "id": "GR_b603d9b7bcfb",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          "तुर"
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1757500128.8219554
+      }
+    ],
+    "timestamp": 1757500129.41325
+  },
+  {
+    "messages": [
+      {
+        "id": "GI_8eb28be8f42d",
+        "type": "message",
+        "role": "user",
+        "content": [
+          "Hello."
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1757500146.307048
+      }
+    ],
+    "timestamp": 1757500146.4981298
+  },
+  {
+    "messages": [
+      {
+        "id": "GR_0597fd6b673c",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          "Shekh Farid sir, আমি ইউটিউব ওপেন করে দিচ্ছি। এরপর কী"
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1757500146.3172004
+      }
+    ],
+    "timestamp": 1757500146.508132
+  }
+]
