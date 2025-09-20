@@ -1,0 +1,478 @@
+[
+  {
+    "messages": [
+      {
+        "id": "GR_9da6770455fa",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          "আসসালামু আলাইকুম Shekh Farid sir! গুড মর্নিং! আজকের তারিখ <coroutine object StructuredTool.ainvoke at 0x000002A4418E7ED0> এবং আপনার শহর <coroutine object get_current_city at 0x000002A4418E7E60>। ওয়েসে, আজকাল সকালটা একটু বেশিই কুয়াশাময় লাগছে, কি বলেন? বলুন Shekh Farid sir, আমি আপনার কোন ধরনের সাহায্য করতে পারি?\n"
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1758350655.5464866
+      }
+    ],
+    "timestamp": 1758350656.5491555
+  },
+  {
+    "messages": [
+      {
+        "id": "GI_993c69123483",
+        "type": "message",
+        "role": "user",
+        "content": [
+          "તમે મા કે આ વેધર અપડેટ એક બોલો"
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1758350667.3581188
+      }
+    ],
+    "timestamp": 1758350667.6084116
+  },
+  {
+    "messages": [
+      {
+        "id": "GR_a35b805186f8",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          "অবশ্যই Shekh Farid sir! ওয়েদার আপডেট জানার জন্য, আমাকে আপনার শহরের নামটা জানতে হবে।"
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1758350667.3663325
+      }
+    ],
+    "timestamp": 1758350667.6275313
+  },
+  {
+    "messages": [
+      {
+        "id": "GI_870e760b886e",
+        "type": "message",
+        "role": "user",
+        "content": [
+          "আমার শহরের নাম ঢাকা"
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1758350672.0866113
+      }
+    ],
+    "timestamp": 1758350672.7484975
+  },
+  {
+    "messages": [
+      {
+        "id": "GR_a57436928ed0",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          "ঢাকা! "
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1758350672.6699681
+      }
+    ],
+    "timestamp": 1758350672.7664983
+  },
+  {
+    "messages": [
+      {
+        "id": "GR_c9e37fc1f9de",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          "ওকে স্যার, ওয়েট করুন। আমি এখনই ওয়েদার আপডেট দিচ্ছি।\nShekh Farid sir, ঢাকার ওয়েদার আপডেটের জন্য একটু অপেক্ষা করুন। আমি দেখছি।"
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1758350683.5365117
+      }
+    ],
+    "timestamp": 1758350684.0132096
+  },
+  {
+    "messages": [
+      {
+        "id": "GI_111fcbff5e5f",
+        "type": "message",
+        "role": "user",
+        "content": [
+          "와 있어."
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1758350697.1526632
+      }
+    ],
+    "timestamp": 1758350698.0125866
+  },
+  {
+    "messages": [
+      {
+        "id": "GR_3dcc15712d91",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          ""
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1758350697.5197775
+      }
+    ],
+    "timestamp": 1758350698.031688
+  },
+  {
+    "messages": [
+      {
+        "id": "GR_2153b4f4600c",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          "Shekh Farid sir, ঢাকার ওয়েদার এখন মেঘলা (cloudy) এবং তাপমাত্রা প্রায় ২৭ ডিগ্রি সেলসিয়াস। আজ বৃষ্টির সম্ভাবনা কম। কেমন আছেন আপনি?"
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1758350715.0746295
+      }
+    ],
+    "timestamp": 1758350715.5106597
+  },
+  {
+    "messages": [
+      {
+        "id": "GI_d53b72cc78a2",
+        "type": "message",
+        "role": "user",
+        "content": [
+          "همین بالا است میگه من است."
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1758350725.7066433
+      }
+    ],
+    "timestamp": 1758350726.5134456
+  },
+  {
+    "messages": [
+      {
+        "id": "GR_3eb5b16e334f",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          "আলহামদুলিল্লাহ, আমিও ভালো আছি Shekh Farid sir। আপনার ভালো থাকাটা জেনে ভালো লাগলো। অন্য কিছু জানতে চান?"
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1758350725.7166052
+      }
+    ],
+    "timestamp": 1758350726.5356321
+  },
+  {
+    "messages": [
+      {
+        "id": "GI_a984ab0f3d76",
+        "type": "message",
+        "role": "user",
+        "content": [
+          "তুমি আমাকে আজকে বাংলাদেশের"
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1758350731.2062733
+      }
+    ],
+    "timestamp": 1758350731.5785208
+  },
+  {
+    "messages": [
+      {
+        "id": "GI_9c326e1d9f61",
+        "type": "message",
+        "role": "user",
+        "content": [
+          "টপ কয়েকটা নিউজ নিউজ বলছে।"
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1758350733.3905203
+      }
+    ],
+    "timestamp": 1758350733.886364
+  },
+  {
+    "messages": [
+      {
+        "id": "GR_d629593b1d5d",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          "আচ্ছা She"
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1758350734.0815017
+      }
+    ],
+    "timestamp": 1758350734.9621317
+  },
+  {
+    "messages": [
+      {
+        "id": "GR_6df7f92ffe7c",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          "kh Farid sir, বাংলাদেশের টপ নিউজ জানতে চান? একটু ওয়েট করুন, আমি দেখছি।\nShekh"
+        ],
+        "interrupted": true,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1758350750.466379
+      }
+    ],
+    "timestamp": 1758350751.0007327
+  },
+  {
+    "messages": [
+      {
+        "id": "GI_1b6e7f859bf5",
+        "type": "message",
+        "role": "user",
+        "content": [
+          "ਨਾਮ ਹਮੇ ਆਪ ਤੋਂ ਨਿਊਜ਼ਰ ਅਪਡੇਟ ਚਾਨ ਤੇ ਚ"
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1758350763.73772
+      }
+    ],
+    "timestamp": 1758350764.0883877
+  },
+  {
+    "messages": [
+      {
+        "id": "GR_01ba72875fd1",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          "ঠিক আছে Shekh Farid sir। যখন নিউজের আপডেট দিতে পারবো, আমি আপনাকে অবশ্যই জানাবো। ততক্ষণে অন্য কিছু জানতে চান?"
+        ],
+        "interrupted": true,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1758350763.73772
+      }
+    ],
+    "timestamp": 1758350764.10563
+  },
+  {
+    "messages": [
+      {
+        "id": "GI_8940c73e4a3f",
+        "type": "message",
+        "role": "user",
+        "content": [
+          "না আমি আমি আপত্ততে এটাই জানতে চাই যে আমাকে টপ লেভেলের নিউজগুলো একটু তুমি পড়ে শোনাও"
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1758350780.2143433
+      }
+    ],
+    "timestamp": 1758350780.2266593
+  },
+  {
+    "messages": [
+      {
+        "id": "GR_47b58e40a959",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          "আচ্ছা Shekh Farid sir, টপ লেভেলের নিউজগুলো পড়ে শোনাতে বলছেন? ঠিক আছে, আমি দেখছি এবং আপনাকে শোনাচ্ছি। একটু অপেক্ষা করুন।"
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1758350780.2497866
+      }
+    ],
+    "timestamp": 1758350781.2602968
+  },
+  {
+    "messages": [
+      {
+        "id": "GI_3b90b9bb0276",
+        "type": "message",
+        "role": "user",
+        "content": [
+          "तारातारी करो"
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1758350791.9309967
+      }
+    ],
+    "timestamp": 1758350792.313125
+  },
+  {
+    "messages": [
+      {
+        "id": "GR_7024cc5b2699",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          "জি Shekh Farid sir, আমি তাড়াতাড়ি করছি। প্লিজ একটু সময় দিন।"
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1758350791.9399981
+      }
+    ],
+    "timestamp": 1758350792.3365173
+  },
+  {
+    "messages": [
+      {
+        "id": "GI_eee92c9b0b95",
+        "type": "message",
+        "role": "user",
+        "content": [
+          "हेलो"
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1758350833.669363
+      }
+    ],
+    "timestamp": 1758350834.5122874
+  },
+  {
+    "messages": [
+      {
+        "id": "GI_e5b7a7a4fa4b",
+        "type": "message",
+        "role": "user",
+        "content": [
+          "तुम्ही कसं करू तुम्ही जुगांतर.com ढुको"
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1758350837.232805
+      }
+    ],
+    "timestamp": 1758350837.5138366
+  },
+  {
+    "messages": [
+      {
+        "id": "GI_0e9dd42c36d7",
+        "type": "message",
+        "role": "user",
+        "content": [
+          "এখান থেকে টপ লেভেলের নিউজগুলো একটু পড়বেন।"
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1758350839.8651578
+      }
+    ],
+    "timestamp": 1758350840.514101
+  },
+  {
+    "messages": [
+      {
+        "id": "GR_812a8a8db523",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          "আচ্ছা "
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1758350840.2750144
+      }
+    ],
+    "timestamp": 1758350840.5401027
+  },
+  {
+    "messages": [
+      {
+        "id": "GR_8398a5b703de",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          "Shekh Farid sir, যুগান্তর ডটকম থেকে টপ লেভেলের নিউজ পড়তে বলছেন? ঠিক আছে, আমি দেখছি।\nShekh Farid sir, যুগান্তর ডটকম ওপেন করতে পারছি না। অন্য কোনো ওয়েবসাইট ট্রাই করবো? অথবা অন্য কিছু জানতে চান?"
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1758350855.359855
+      }
+    ],
+    "timestamp": 1758350855.610956
+  },
+  {
+    "messages": [
+      {
+        "id": "GI_9141e5548085",
+        "type": "message",
+        "role": "user",
+        "content": [
+          "আচ্ছা তুমি এক কাজ করো তুমি অনলাইনে থেকে আজকে স্বর্ণের দামটা বের করো আজকে হলো 20 সেপ্টেম্বর 2025"
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1758350870.5108685
+      }
+    ],
+    "timestamp": 1758350870.6708112
+  },
+  {
+    "messages": [
+      {
+        "id": "GR_811a0eb1eb7c",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          "অবশ্যই Shekh Farid sir! 20 সেপ্টেম্বর, 2025 তারিখের স্বর্ণের দাম জানার জন্য একটু অপেক্ষা করুন।"
+        ],
+        "interrupted": false,
+        "transcript_confidence": null,
+        "hash": null,
+        "created_at": 1758350870.5260596
+      }
+    ],
+    "timestamp": 1758350870.6901646
+  }
+]
