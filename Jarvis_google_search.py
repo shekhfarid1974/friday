@@ -28,7 +28,7 @@ async def google_search(query: str) -> str:
     No raw links are included to make speech output sound natural.
     """
 
-    logger.info(f"Query প্রাপ্ত হয়েছে: {query}")
+    logger.info(f"Query प्राप्त हुई: {query}")
 
     api_key = os.getenv("GOOGLE_SEARCH_API_KEY")
     search_engine_id = os.getenv("SEARCH_ENGINE_ID")
@@ -41,7 +41,7 @@ async def google_search(query: str) -> str:
             missing.append("SEARCH_ENGINE_ID")
         return f"Missing environment variables: {', '.join(missing)}"
 
-    url = "https://www.googleapis.com/customsearch/v1  "
+    url = "https://www.googleapis.com/customsearch/v1"
     params = {
         "key": api_key,
         "cx": search_engine_id,
@@ -50,7 +50,7 @@ async def google_search(query: str) -> str:
     }
 
     try:
-        logger.info("Google Custom Search API কে request পাঠানো হচ্ছে...")
+        logger.info("Google Custom Search API को request भेजी जा रही है...")
         response = requests.get(url, params=params, timeout=10)
     except requests.exceptions.RequestException as e:
         logger.error(f"Request failed: {e}")
@@ -58,14 +58,14 @@ async def google_search(query: str) -> str:
 
     if response.status_code != 200:
         logger.error(f"Google API error: {response.status_code} - {response.text}")
-        return f"Google Search API তে error হয়েছে: {response.status_code} - {response.text}"
+        return f"Google Search API में error आया: {response.status_code} - {response.text}"
 
     data = response.json()
     results = data.get("items", [])
 
     if not results:
-        logger.info("কোনো ফলাফল পাওয়া যায়নি।")
-        return "কোনো ফলাফল পাওয়া যায়নি।"
+        logger.info("कोई results नहीं मिले।")
+        return "कोई results नहीं मिले।"
 
     # Create a natural, speech-friendly summary
     formatted = "Here are the top results:\n"
@@ -83,8 +83,8 @@ async def get_current_datetime() -> str:
 
     Use this tool when the user asks for the current time, date, or wants to know what day it is.
     Example prompts:
-    - "এখন কটা বাজে?"
-    - "আজকের তারিখ কি?"
+    - "अब क्या time हो रहा है?"
+    - "आज की तारीख क्या है?"
     - "What’s the time right now?"
     """
 

@@ -222,7 +222,7 @@ async def scroll_cursor_tool(direction: str, amount: int = 10):
     """
     Scrolls the screen vertically in the specified direction.
 
-    Useful for commands like "scroll down" or "উপরে করুন".
+    Useful for commands like "scroll down" or "upar karo".
 
     Args:
         direction (str): The scroll direction. Must be either "up" or "down".
@@ -245,7 +245,7 @@ async def type_text_tool(text: str):
     """
     Simulates typing the given text character by character, as if entered manually from a keyboard.
 
-    Useful for commands like "type hello world" or "hello লিখুন".
+    Useful for commands like "type hello world" or "hello likho".
 
     Args:
         text (str): The full string to type, including spaces, punctuation, and symbols.
@@ -261,7 +261,7 @@ async def press_key_tool(key: str):
     """
     Simulates pressing a single key on the keyboard, like Enter, Esc, or any letter/number.
 
-    Useful for commands like "Enter চাপুন", "Escape চাপুন", or "A press করুন".
+    Useful for commands like "Enter दबाओ", "Escape दबाओ", or "A press करो".
 
     Args:
         key (str): The name of the key to press (e.g., "enter", "a", "ctrl", "esc").
@@ -279,8 +279,8 @@ async def press_hotkey_tool(keys: List[str]):
     """
     Simulates pressing a keyboard shortcut like Ctrl+S, Alt+F4, etc.
 
-    Use this when the user says something like "save করুন", "window বন্ধ করুন", 
-    or "refresh করুন".
+    Use this when the user says something like "save करो", "window बंद करो", 
+    or "refresh कर दो".
 
     Args:
         keys (List[str]): List of key names to press together (e.g., ["ctrl", "s"]).
@@ -298,7 +298,7 @@ async def control_volume_tool(action: str):
     """
     Changes the system volume using keyboard emulation.
 
-    Use this when the user says something like "volume বাড়ান", "mute করুন", 
+    Use this when the user says something like "volume बढ़ाओ", "mute कर दो", 
     or "lower the sound".
 
     Args:
@@ -318,7 +318,7 @@ async def swipe_gesture_tool(direction: str):
     Simulates a swipe gesture on the screen using the mouse.
 
     Use this when the user wants to swipe in a direction like up, down, left, or right — 
-    for example: "নীচে স্ক্রোল করুন", "left swipe করুন", or "screen উপরে করুন".
+    for example: "नीचे स्क्रॉल करो", "left swipe करो", or "screen ऊपर करो".
 
     Args:
         direction (str): One of ["up", "down", "left", "right"].
@@ -329,3 +329,4 @@ async def swipe_gesture_tool(direction: str):
 
 
     return await with_temporary_activation(controller.swipe_gesture, direction)
+
